@@ -64,9 +64,35 @@ function Door1(number, onUnlock) {
 
     // ==== Напишите свой код для открытия второй двери здесь ====
     // Для примера дверь откроется просто по клику на неё
-    this.popup.addEventListener('click', function() {
+    var door = new WorldDoor(200, 180, 180, 180);
+    var guys = [new Man(40, 400), new Man(160, 400)];    
+    
+
+    this.popup.querySelector('.door-riddle').appendChild(door._node);
+    door.update();
+    for (var i = 0; i < guys.length; i++) {      
+      this.popup.querySelector('.door-riddle').appendChild(guys[i]._node);
+      guys[i].update();
+    }
+
+
+    this.popup.addEventListener('pointermove', _onDocMove.bind(this));
+
+    function _onDocMove(e) {
+      door._count = 0;
+
+      guys.forEach(function(guy) {
+        if (isManInDoor(guy, door)) {
+          door.incCount();
+        }
+
+      })
+      
+      if (door._count === guys.length) {
         this.unlock();
-    }.bind(this));
+      }
+    }
+
     // ==== END Напишите свой код для открытия второй двери здесь ====
 }
 Door1.prototype = Object.create(DoorBase.prototype);
@@ -83,9 +109,29 @@ function Door2(number, onUnlock) {
 
     // ==== Напишите свой код для открытия третей двери здесь ====
     // Для примера дверь откроется просто по клику на неё
-    this.popup.addEventListener('click', function() {
+    var ladder = this.popup.querySelector('.ladder');
+    var door = new WorldDoor(document.body.clientWidth / 2, 100, 180, 180);
+    var man = new Man(document.body.clientWidth / 2, 500, 'up');  
+    
+    this.popup.querySelector('.door-riddle').appendChild(door._node);
+    this.popup.querySelector('.door-riddle').appendChild(man._node);
+    door.update();  
+    man.update();
+
+    this.popup.addEventListener('pointermove', _onDocMove.bind(this));
+
+    function _onDocMove(e) {
+      door._count = 0;
+
+      if (isManInDoor(man, door)) {
+        door.incCount();
+      }
+      
+      if (door._count === 1) {
         this.unlock();
-    }.bind(this));
+      }
+    }
+
     // ==== END Напишите свой код для открытия третей двери здесь ====
 }
 Door2.prototype = Object.create(DoorBase.prototype);
@@ -103,9 +149,41 @@ function Box(number, onUnlock) {
 
     // ==== Напишите свой код для открытия сундука здесь ====
     // Для примера сундук откроется просто по клику на него
-    this.popup.addEventListener('click', function() {
+    var ladder = this.popup.querySelector('.ladder');
+    var door = new WorldDoor(document.body.clientWidth / 2, 300, 180, 180);
+    
+    var guys = [
+      new Man(document.body.clientWidth / 2, 50, 'up'),
+      new Man(document.body.clientWidth / 2, 500, 'up') 
+    ];
+    
+    
+    
+    this.popup.querySelector('.door-riddle').appendChild(door._node);
+    door.update();  
+    for (var i = 0; i < guys.length; i++) {      
+      this.popup.querySelector('.door-riddle').appendChild(guys[i]._node);
+      guys[i].update();
+    }
+      
+
+    this.popup.addEventListener('pointermove', _onDocMove.bind(this));
+
+    function _onDocMove(e) {
+      door._count = 0;
+
+      guys.forEach(function(guy) {
+        if (isManInDoor(guy, door)) {
+          door.incCount();
+        }
+
+      })
+      
+      if (door._count === guys.length) {
         this.unlock();
-    }.bind(this));
+      }
+      
+    }
     // ==== END Напишите свой код для открытия сундука здесь ====
 
     this.showCongratulations = function() {

@@ -20,6 +20,7 @@ function DoorBase(number, onUnlock) {
     this.close.addEventListener('click', onCloseClick.bind(this));
 
     function onDoorClick() {
+      this.openPopup();
         if (!this.isDisabled) {
             this.openPopup();
         }
